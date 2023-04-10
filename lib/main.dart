@@ -120,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         name: 'Chocolate Donoughts',
         image: 'assets/images/chocolate_donoughts.jpg',
         price: 1.54,
-        category: 'Fruits',
+        category: 'Desert',
         favourite: false),
     Snacks(
         name: 'Chocolate Oreo Ice Cream',
@@ -264,6 +264,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
+              backgroundColor: const Color.fromARGB(255, 231, 245, 232),
               title: Text(
                 'Item Details',
                 style: GoogleFonts.montserrat(
@@ -273,204 +274,198 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ),
               content: AspectRatio(
                 aspectRatio: 15 / 30,
-                child: Container(
-                  color: Colors.white,
-                  child: ListView(
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                            style: GoogleFonts.montserrat(
-                                color: Colors.black, fontSize: 28),
-                            text: documentId.name),
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                      Row(
+                child: ListView(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          style: GoogleFonts.montserrat(
+                              color: Colors.black, fontSize: 28),
+                          text: documentId.name),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        CircleAvatar(
+                          radius: 80,
+                          backgroundImage: AssetImage(documentId.image),
+                        ),
+                        IconButton(
+                          iconSize: 25,
+                          splashRadius: 50,
+                          onPressed: () {
+                            updateFavourite(snacksList.indexOf(documentId));
+                            if (_favouriteController.status ==
+                                AnimationStatus.dismissed) {
+                              _favouriteController.reset();
+                              _favouriteController.animateTo(0.5);
+                            } else {
+                              _favouriteController.reverse();
+                            }
+                          },
+                          icon: Lottie.asset(Icons8.heart_color,
+                              controller: _favouriteController),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    Text(
+                      'Price: \$ ${documentId.price}',
+                      style: GoogleFonts.montserrat(
+                          color: Colors.black, fontSize: 28),
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          cartNumber;
+                        });
+                      },
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 80,
-                            backgroundImage: AssetImage(documentId.image),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (cartNumber != 1) {
+                                  cartNumber -= 1;
+                                  updateCartNumber(cartNumber);
+                                }
+                              });
+                            },
+                            child: const Text(
+                              '-  ',
+                              style: TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.redAccent),
+                            ),
                           ),
-                          IconButton(
-                            iconSize: 25,
-                            splashRadius: 50,
-                            onPressed: () {
-                              updateFavourite(snacksList.indexOf(documentId));
-                              if (_favouriteController.status ==
-                                  AnimationStatus.dismissed) {
-                                _favouriteController.reset();
-                                _favouriteController.animateTo(0.5);
+                          StreamBuilder<String>(
+                            stream: cartNumberStream,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(snapshot.data ?? '1',
+                                    style:
+                                        GoogleFonts.montserrat(fontSize: 50));
                               } else {
-                                _favouriteController.reverse();
+                                return Text(
+                                  '1',
+                                  style: GoogleFonts.montserrat(fontSize: 50),
+                                );
                               }
                             },
-                            icon: Lottie.asset(Icons8.heart_color,
-                                controller: _favouriteController),
                           ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                cartNumber += 1;
+                                updateCartNumber(cartNumber);
+                              });
+                            },
+                            child: const Text(
+                              '  +',
+                              style: TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.redAccent),
+                            ),
+                          )
                         ],
                       ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                      Text(
-                        'Price: \$ ${documentId.price}',
-                        style: GoogleFonts.montserrat(
-                            color: Colors.black, fontSize: 28),
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            cartNumber;
-                          });
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (cartNumber != 1) {
-                                    cartNumber -= 1;
-                                    updateCartNumber(cartNumber);
-                                  }
-                                });
-                              },
-                              child: const Text(
-                                '-  ',
-                                style: TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.redAccent),
-                              ),
-                            ),
-                            StreamBuilder<String>(
-                              stream: cartNumberStream,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<String> snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(snapshot.data ?? '1',
-                                      style:
-                                          GoogleFonts.montserrat(fontSize: 50));
-                                } else {
-                                  return Text(
-                                    '1',
-                                    style: GoogleFonts.montserrat(fontSize: 50),
-                                  );
-                                }
-                              },
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  cartNumber += 1;
-                                  updateCartNumber(cartNumber);
-                                });
-                              },
-                              child: const Text(
-                                '  +',
-                                style: TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.redAccent),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Order Confirmation'),
-                                  content: Text(
-                                      'You are about to order $cartNumber of ${documentId.name}'),
-                                  actions: [
-                                    TextButton(
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Order Confirmation'),
+                                content: Text(
+                                    'You are about to order $cartNumber of ${documentId.name}'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
                                       onPressed: () {
                                         Navigator.pop(context);
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  content: Row(
-                                                    children: [
-                                                      AnimatedBuilder(
-                                                          animation:
-                                                              _tickControllerX,
-                                                          builder: (BuildContext
-                                                                  context,
-                                                              Widget? child) {
-                                                            return SizedBox(
-                                                              height: 20,
-                                                              width: 20,
-                                                              child: Lottie
-                                                                  .asset(Icons8
-                                                                      .check_circle),
-                                                            );
-                                                          }),
-                                                      const Text(
-                                                          '   Your order has been confirmed!'),
-                                                    ],
-                                                  ),
-                                                  actions: [
-                                                    TextButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child:
-                                                            const Text('done'))
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Row(
+                                                  children: [
+                                                    AnimatedBuilder(
+                                                        animation:
+                                                            _tickControllerX,
+                                                        builder: (BuildContext
+                                                                context,
+                                                            Widget? child) {
+                                                          return SizedBox(
+                                                            height: 20,
+                                                            width: 20,
+                                                            child: Lottie.asset(
+                                                                Icons8
+                                                                    .check_circle),
+                                                          );
+                                                        }),
+                                                    const Text(
+                                                        '   Your order has been confirmed!'),
                                                   ],
-                                                );
-                                              });
-                                        },
-                                        child: const Text('Order'))
-                                  ],
-                                );
-                              });
-                        },
-                        child: Center(
-                          child: AspectRatio(
-                            aspectRatio: 120 / 30,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.redAccent,
-                                  borderRadius: BorderRadius.circular(5)),
-                              height: 40,
-                              width: 150,
-                              child: Center(
-                                child: Text(
-                                  'Add to cart',
-                                  style: GoogleFonts.montserrat(
-                                      color: Colors.white, fontSize: 28),
-                                ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: const Text('done'))
+                                                ],
+                                              );
+                                            });
+                                      },
+                                      child: const Text('Order'))
+                                ],
+                              );
+                            });
+                      },
+                      child: Center(
+                        child: AspectRatio(
+                          aspectRatio: 120 / 30,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.redAccent,
+                                borderRadius: BorderRadius.circular(5)),
+                            height: 40,
+                            width: 150,
+                            child: Center(
+                              child: Text(
+                                'Add to cart',
+                                style: GoogleFonts.montserrat(
+                                    color: Colors.white, fontSize: 28),
                               ),
                             ),
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             );
@@ -500,7 +495,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 children: List.generate(
                   list.length,
                   (index) {
-                    return SizedBox(
+                    return Container(
+                      decoration: const BoxDecoration(
+                          color: Color.fromARGB(110, 255, 255, 255),
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
                       width: MediaQuery.of(context).size.width / 2.2,
                       child: GestureDetector(
                         onTap: getdetailsPage(list[index]),
@@ -538,7 +536,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           children: List.generate(
             list.length,
             (index) {
-              return SizedBox(
+              return Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(110, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 width: MediaQuery.of(context).size.width / 2.2,
                 child: GestureDetector(
                   onTap: getdetailsPage(list[index]),
@@ -571,7 +572,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           children: List.generate(
             list.length,
             (index) {
-              return SizedBox(
+              return Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(110, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 width: MediaQuery.of(context).size.width / 2.2,
                 child: GestureDetector(
                   onTap: getdetailsPage(list[index]),
@@ -604,7 +608,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           children: List.generate(
             list.length,
             (index) {
-              return SizedBox(
+              return Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(110, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 width: MediaQuery.of(context).size.width / 2.2,
                 child: GestureDetector(
                   onTap: getdetailsPage(list[index]),
@@ -637,7 +644,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           children: List.generate(
             list.length,
             (index) {
-              return SizedBox(
+              return Container(
+                decoration: const BoxDecoration(
+                    color: Color.fromARGB(110, 255, 255, 255),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 width: MediaQuery.of(context).size.width / 2.2,
                 child: GestureDetector(
                   onTap: getdetailsPage(list[index]),
@@ -683,34 +693,37 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return GestureDetector(
             // onTap: getDetails(snacksList[index]),
             onTap: getdetailsPage(snacksList[featuredlist[index]]),
-            child: Card(
-              // color: Colors.amber,
-              child: SizedBox(
-                height: 250,
-                width: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundImage:
-                          AssetImage(snacksList[featuredlist[index]].image),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    Center(
-                      child: RichText(
-                        text: TextSpan(
-                          text: snacksList[featuredlist[index]].name,
-                          style: GoogleFonts.montserrat(
-                              fontSize: 10, color: Colors.black),
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: Card(
+                // color: Colors.amber,
+                child: SizedBox(
+                  height: 250,
+                  width: 120,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage:
+                            AssetImage(snacksList[featuredlist[index]].image),
+                      ),
+                      const SizedBox(
+                        height: 3,
+                      ),
+                      Center(
+                        child: RichText(
+                          text: TextSpan(
+                            text: snacksList[featuredlist[index]].name,
+                            style: GoogleFonts.montserrat(
+                                fontSize: 10, color: Colors.black),
+                          ),
                         ),
                       ),
-                    ),
-                    Text('\$ ${snacksList[featuredlist[index]].price}')
-                  ],
+                      Text('\$ ${snacksList[featuredlist[index]].price}')
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -725,9 +738,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 231, 245, 232),
         appBar: AppBar(
+          leading: const Icon(
+            Icons.storefront,
+          ),
+          title: Text(
+            'F O O D   P L U S +',
+            style: GoogleFonts.montserrat(fontWeight: FontWeight.w600),
+          ),
           elevation: 0,
-          backgroundColor: Colors.lightGreenAccent[200],
+          backgroundColor: const Color.fromARGB(255, 189, 252, 193),
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(8, 15, 8, 8),
