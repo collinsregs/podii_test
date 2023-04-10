@@ -15,7 +15,7 @@ Card widget for wrapping each snack item.
 Various other widgets for styling and user interaction, such as SizedBox, Padding, and Text.
 To get started, build the basic UI screens, and then move on to implementing logic and functionality. You can also add additional features or enhancements to the app, such as implementing a favorites list or anything that will seem befitting to you.
 
-This project is inspired by this design from dribbble https://dribbble.com/shots/9094050-Online-Reservation?utm_source=Clipboard_Shot&utm_campaign=zmy969&utm_content=Online%20Reservation&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=zmy969&utm_content=Online%20Reservation&utm_medium=Social_Share
+This project is inspired by Online Reservation by ZhangMingYang dribbble https://dribbble.com/shots/9094050-Online-Reservation?utm_source=Clipboard_Shot&utm_campaign=zmy969&utm_content=Online%20Reservation&utm_medium=Social_Share&utm_source=Clipboard_Shot&utm_campaign=zmy969&utm_content=Online%20Reservation&utm_medium=Social_Share
 
 # Installation
 To run this app, follow these steps:
