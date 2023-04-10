@@ -9,4 +9,11 @@
             android:gravity="center"
             android:src="@mipmap/launch_image" />
     </item> -->
+     <item>
+        <shape android:shape="oval">
+            <size android:width="200dp" android:height="200dp" />
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+    
 </layer-list>
